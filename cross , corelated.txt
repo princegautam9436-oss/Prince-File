@@ -1,0 +1,94 @@
+
+
+Cross Join 
+
+1. Write a SQL query to display all possible combinations of employees and departments.
+
+
+select e.department_id,department_name,employee_name
+from departments d
+cross join employees e
+
+
+2. Write a SQL query to display all employees and all departments, including employees without departments and departments without employees.
+
+select d.department_id,department_name,employee_id,employee_name
+from departments d
+left outer join employees e
+on d.department_id = e.department_id
+union
+select d.department_id,department_name,employee_id,employee_name
+from departments d
+right outer join employees e
+on d.department_id = e.department_id
+
+
+3. Using two tables:
+products
+sizes
+Write a SQL query to generate all possible product-size combinations.
+
+select product_name,base_price,size
+from sizes
+cross join products
+
+_____________________________________________________________________________________________________________________________________________________________________________
+
+
+
+
+Correlated Subquery
+
+
+1. Find guests who have made at least one booking.
+
+   select g.guest_id,guest_name
+from guests g
+where exists (
+	select 1 from bookings b where b.guest_id = g.guest_id)
+
+
+2. Find guests who have never made a booking.
+
+   select g.guest_id,guest_name
+from guests g
+where not exists (
+	select 1 from bookings b where b.guest_id = g.guest_id)
+
+
+3. Find guests who have made more than one booking.
+select guest_id,guest_name from guests g
+where (select count(*) from bookings b where g.guest_id = b.guest_id) > 1
+  
+4. Find guests whose average booking amount is greater than ₹10,000.
+  
+  select g.guest_id,guest_name,avg(total_amount)
+from guests g
+inner join bookings b
+on g.guest_id = b.guest_id
+group by b.guest_id
+having avg(total_amount) > 10000
+
+ 
+5. Find bookings whose amount is greater than the average booking amount of the same guest.
+  
+select guest_id,booking_id,b.total_amount from bookings b
+where total_amount > (select avg(total_amount) from bookings
+)
+
+
+
+
+
+6. Find the most expensive booking of each guest.
+7. Find rooms whose price is greater than the average price of rooms on the same floor.
+8. Find staff members whose salary is greater than the average salary of their department.
+9. Find bookings that have at least one service used.
+10. Find bookings where the total service quantity is greater than 2.
+11. Find the highest-paid employee in each department.
+12. Find the third-highest-paid employee in each department.
+13. Find guests whose every booking amount is greater than ₹5,000.
+14. Find the most frequently booked room.
+15. Find guests whose service usage count is greater than their booking count.
+16. Find bookings where the service cost is greater than 20% of the booking amount.
+17. Give room wise booking_count, total_revenue, revenue_per_booking.
